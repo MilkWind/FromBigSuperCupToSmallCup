@@ -297,43 +297,6 @@ export const useRankStore = defineStore('rank', () => {
     currentTemplate.value = temp
   }
 
-  const exportRanking = () => {
-    const data = {
-      template: currentTemplate.value,
-      tiers: currentTiers.value,
-      library: library.value,
-      settings: {
-        showItemNames: showItemNames.value,
-        pageTitle: pageTitle.value
-      },
-      timestamp: Date.now()
-    }
-    return JSON.stringify(data, null, 2)
-  }
-
-  const importRanking = (jsonData: string) => {
-    try {
-      const data = JSON.parse(jsonData)
-      if (data.template) currentTemplate.value = data.template
-      if (data.library) library.value = data.library
-      if (data.settings) {
-        showItemNames.value = data.settings.showItemNames ?? true
-        pageTitle.value = data.settings.pageTitle ?? '从超大杯到小杯'
-      }
-      if (data.tiers) {
-        if (currentTemplate.value === 'custom') {
-          customTiers.value = data.tiers
-        }
-        saveCurrentRanking()
-      }
-      saveLibrary()
-      saveSettings()
-      return true
-    } catch (e) {
-      console.error('Failed to import ranking:', e)
-      return false
-    }
-  }
 
   const saveAsTemplate = (templateName: string) => {
     if (currentTemplate.value !== 'custom' || customTiers.value.length === 0) {
@@ -417,8 +380,6 @@ export const useRankStore = defineStore('rank', () => {
     loadLibrary,
     loadSettings,
     resetCurrentRanking,
-    exportRanking,
-    importRanking,
     saveAsTemplate,
     deleteCustomTemplate,
     saveCustomTemplates,

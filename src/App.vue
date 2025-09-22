@@ -151,49 +151,6 @@ function deleteTemplate() {
     }
   }
 }
-
-function exportData() {
-  try {
-    const data = store.exportRanking()
-    const blob = new Blob([data], { type: 'application/json' })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = `tier-rank-${new Date().toISOString().split('T')[0]}.json`
-    document.body.appendChild(a)
-    a.click()
-    document.body.removeChild(a)
-    URL.revokeObjectURL(url)
-  } catch (e) {
-    alert('导出失败：' + e)
-  }
-}
-
-function importData() {
-  const input = document.createElement('input')
-  input.type = 'file'
-  input.accept = '.json'
-  input.onchange = (e) => {
-    const file = (e.target as HTMLInputElement).files?.[0]
-    if (file) {
-      const reader = new FileReader()
-      reader.onload = (e) => {
-        try {
-          const data = e.target?.result as string
-          if (store.importRanking(data)) {
-            alert('导入成功！')
-          } else {
-            alert('导入失败，请检查文件格式')
-          }
-        } catch (e) {
-          alert('导入失败：' + e)
-        }
-      }
-      reader.readAsText(file)
-    }
-  }
-  input.click()
-}
 </script>
 
 <template>
@@ -208,8 +165,6 @@ function importData() {
       @add-new-tier="handleAddNewTier"
       @save-template="saveAsTemplate"
       @delete-template="deleteTemplate"
-      @export-data="exportData"
-      @import-data="importData"
     />
 
     <!-- 主内容区 -->

@@ -30,8 +30,6 @@ const emit = defineEmits<{
   'add-new-tier': []
   'save-template': []
   'delete-template': []
-  'export-data': []
-  'import-data': []
 }>()
 
 // 计算属性 - removed unused currentTemplateName
@@ -95,12 +93,6 @@ function handleShowHelp() {
         </button>
         <button class="bg-gray-600 text-white border-none rounded-md p-2 cursor-pointer text-sm transition-all duration-200 flex items-center justify-center min-h-8 hover:bg-gray-500 hover:-translate-y-px" @click="handleShowHelp" title="使用说明">
           <SvgIcon name="help" :size="16" />
-        </button>
-        <button class="bg-gray-600 text-white border-none rounded-md p-2 cursor-pointer text-sm transition-all duration-200 flex items-center justify-center min-h-8 hover:bg-gray-500 hover:-translate-y-px" @click="emit('export-data')" title="导出数据">
-          <SvgIcon name="save" :size="16" />
-        </button>
-        <button class="bg-gray-600 text-white border-none rounded-md p-2 cursor-pointer text-sm transition-all duration-200 flex items-center justify-center min-h-8 hover:bg-gray-500 hover:-translate-y-px" @click="emit('import-data')" title="导入数据">
-          <SvgIcon name="folder" :size="16" />
         </button>
       </div>
       
