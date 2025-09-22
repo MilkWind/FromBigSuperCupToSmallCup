@@ -110,7 +110,7 @@ async function handleDeleteTier() {
           v-model="localItems"
           :animation="200"
           chosen-class="drag-chosen"
-          class="flex flex-wrap gap-1.5 w-full min-h-[48px]"
+          class="flex flex-wrap gap-1.5 w-full min-h-[65px]"
           drag-class="drag-drag"
           ghost-class="drag-ghost"
           group="items"
@@ -121,7 +121,7 @@ async function handleDeleteTier() {
             :data-item-id="item.id"
             :data-source="'tier'"
             :data-tier-id="tier.id"
-            class="relative w-12 h-12 border-2 border-gray-500 rounded overflow-hidden cursor-grab bg-gray-600 transition-all duration-200 flex-shrink-0 hover:border-blue-500 hover:-translate-y-px hover:shadow-lg hover:shadow-blue-500/30 active:cursor-grabbing"
+            class="relative w-[65px] h-[65px] border-2 border-gray-500 rounded overflow-hidden cursor-grab bg-gray-600 transition-all duration-200 flex-shrink-0 hover:border-blue-500 hover:-translate-y-px hover:shadow-lg hover:shadow-blue-500/30 active:cursor-grabbing"
         >
           <img
               v-if="item.image"

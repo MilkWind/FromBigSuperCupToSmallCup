@@ -162,7 +162,7 @@ function handleChange(event: any) {
           :key="item.id"
           :data-item-id="item.id"
           :data-source="'library'"
-          class="relative w-[48px] h-[48px] border-2 border-gray-500 rounded-md overflow-hidden cursor-grab bg-gray-600 transition-all duration-200 flex-shrink-0 hover:border-blue-500 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-blue-500/30 active:cursor-grabbing"
+          class="relative w-[65px] h-[65px] border-2 border-gray-500 rounded-md overflow-hidden cursor-grab bg-gray-600 transition-all duration-200 flex-shrink-0 hover:border-blue-500 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-blue-500/30 active:cursor-grabbing"
           @dblclick="handleItemDoubleClick(item)"
       >
         <img
@@ -188,7 +188,7 @@ function handleChange(event: any) {
     </VueDraggable>
     <!-- Add materials button -->
     <div
-        class="flex flex-col justify-center items-center w-[48px] h-[48px] border-2 border-gray-500 rounded-md overflow-hidden cursor-pointer bg-gray-600 transition-all duration-200 flex-shrink-0"
+        class="flex flex-col justify-center items-center w-[65px] h-[65px] border-2 border-gray-500 rounded-md overflow-hidden cursor-pointer bg-gray-600 transition-all duration-200 flex-shrink-0"
         @click="openFileDialog"
     >
           <span class="text-[15px]">
