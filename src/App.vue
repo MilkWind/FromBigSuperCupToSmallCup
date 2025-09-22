@@ -1,7 +1,7 @@
-<script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
-import { useRankStore } from './stores/rankStore'
-import type { Tier, RankItem } from './stores/rankStore'
+<script lang="ts" setup>
+import {computed, onMounted, ref} from 'vue'
+import type {RankItem, Tier} from './stores/rankStore'
+import {useRankStore} from './stores/rankStore'
 import TierEditModal from './components/TierEditModal.vue'
 import HelpModal from './components/HelpModal.vue'
 import FloatingSettings from './sections/FloatingSettings.vue'
@@ -10,25 +10,21 @@ import LibraryFooter from './sections/LibraryFooter.vue'
 
 const store = useRankStore()
 
-// 模态框状态
 const showTierEdit = ref(false)
 const showHelp = ref(false)
 const editingTier = ref<Tier | undefined>()
 const isNewTier = ref(false)
 
-// 计算属性
 const currentTemplateName = computed(() => {
   const template = store.templates.find(t => t.id === store.currentTemplate)
   return template?.name || '自定义'
 })
 
-// 生命周期
 onMounted(() => {
   store.loadLibrary()
   store.loadSettings()
 })
 
-// 方法
 function editTitle() {
   const newTitle = prompt('请输入新的标题：', store.pageTitle)
   if (newTitle !== null && newTitle.trim()) {
@@ -127,7 +123,7 @@ function saveAsTemplate() {
     alert('只有在自定义模式下且有等级时才能保存为模板')
     return
   }
-  
+
   const templateName = prompt('请输入模板名称：')
   if (templateName && templateName.trim()) {
     if (store.saveAsTemplate(templateName.trim())) {
@@ -144,7 +140,7 @@ function deleteTemplate() {
     alert('只能删除自定义模板')
     return
   }
-  
+
   if (confirm(`确定要删除模板"${currentTemplateObj.name}"吗？`)) {
     if (store.deleteCustomTemplate(store.currentTemplate)) {
       alert('模板删除成功')
@@ -155,49 +151,49 @@ function deleteTemplate() {
 
 <template>
   <div class="min-h-screen flex flex-col pb-[200px]">
-    <!-- 浮动设置面板 -->
+    <!-- Floating settings panel -->
     <FloatingSettings
-      v-model:show-help="showHelp"
-      @edit-title="editTitle"
-      @reset-ranking="resetCurrentRanking"
-      @toggle-item-names="toggleItemNames"
-      @template-change="handleTemplateChange"
-      @add-new-tier="handleAddNewTier"
-      @save-template="saveAsTemplate"
-      @delete-template="deleteTemplate"
+        v-model:show-help="showHelp"
+        @edit-title="editTitle"
+        @reset-ranking="resetCurrentRanking"
+        @toggle-item-names="toggleItemNames"
+        @template-change="handleTemplateChange"
+        @add-new-tier="handleAddNewTier"
+        @save-template="saveAsTemplate"
+        @delete-template="deleteTemplate"
     />
 
-    <!-- 主内容区 -->
+    <!-- Main content area -->
     <MainContent
-      @edit-title="editTitle"
-      @edit-tier="handleTierEdit"
-      @delete-tier="handleTierDelete"
-      @update-tier-items="handleTierItemsUpdate"
+        @edit-title="editTitle"
+        @edit-tier="handleTierEdit"
+        @delete-tier="handleTierDelete"
+        @update-tier-items="handleTierItemsUpdate"
     />
 
-    <!-- 底部固钉素材库和删除区域 -->
+    <!-- Fixed bottom library and delete zone -->
     <LibraryFooter
-      :library="store.library"
-      :show-item-names="store.showItemNames"
-      @update-library="handleLibraryUpdate"
-      @add-library-item="handleLibraryAddItem"
-      @delete-item="handleDeleteItem"
-      @remove-from-tier="handleRemoveFromTier"
-      @delete-completely="handleDeleteCompletely"
+        :library="store.library"
+        :show-item-names="store.showItemNames"
+        @update-library="handleLibraryUpdate"
+        @add-library-item="handleLibraryAddItem"
+        @delete-item="handleDeleteItem"
+        @remove-from-tier="handleRemoveFromTier"
+        @delete-completely="handleDeleteCompletely"
     />
 
-    <!-- 模态框 -->
+    <!-- Modals -->
     <TierEditModal
-      :show="showTierEdit"
-      :tier="editingTier"
-      :is-new="isNewTier"
-      @close="showTierEdit = false"
-      @save="handleTierSave"
+        :is-new="isNewTier"
+        :show="showTierEdit"
+        :tier="editingTier"
+        @close="showTierEdit = false"
+        @save="handleTierSave"
     />
-    
+
     <HelpModal
-      v-if="showHelp"
-      @close="showHelp = false"
+        v-if="showHelp"
+        @close="showHelp = false"
     />
   </div>
 </template>

@@ -51,12 +51,12 @@ function processImageFile(file: File, fileName: string) {
   reader.onload = (e) => {
     const img = new Image()
     img.onload = () => {
-      // 创建canvas来压缩图片
+      // Create a canvas to compress images
       const canvas = document.createElement('canvas')
       let {width, height} = img
       const maxSize = 200
 
-      // 保持比例缩放
+      // Keep aspect ratio
       if (width > height && width > maxSize) {
         height = Math.round(height * (maxSize / width))
         width = maxSize
@@ -125,23 +125,10 @@ function openFileDialog() {
   fileInput.value?.click()
 }
 
-function handleStart(event: any) {
-  // 设置拖拽数据，用于删除区域
-  const item = props.items[event.oldIndex]
-  if (item && event.originalEvent?.dataTransfer) {
-    const dragData = {
-      item: item,
-      source: 'library'
-    }
-    event.originalEvent.dataTransfer.setData('text/plain', JSON.stringify(dragData))
-  }
-}
-
 function handleChange(event: any) {
   // Handle any changes to the library items
   console.log('Library change event:', event)
   if (event.removed) {
-    // If item was removed from library (dragged to delete zone), emit the update
     console.log('Item removed from library:', event.removed.element)
     // The localItems computed property will automatically emit the update
   }
@@ -166,12 +153,13 @@ function handleChange(event: any) {
           class="flex flex-wrap gap-2 library-container"
           drag-class="drag-drag"
           ghost-class="drag-ghost"
-          @start="handleStart"
           @change="handleChange"
       >
         <div
             v-for="item in items"
             :key="item.id"
+            :data-source="'library'"
+            :data-item-id="item.id"
             class="relative w-[48px] h-[48px] border-2 border-gray-500 rounded-md overflow-hidden cursor-grab bg-gray-600 transition-all duration-200 flex-shrink-0 hover:border-blue-500 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-blue-500/30 active:cursor-grabbing"
             @dblclick="handleItemDoubleClick(item)"
         >
@@ -195,7 +183,7 @@ function handleChange(event: any) {
 
 
       </VueDraggable>
-      <!-- 添加素材按钮 -->
+      <!-- Add materials button -->
       <div
           class="flex flex-col justify-center items-center w-[48px] h-[48px] border-2 border-gray-500 rounded-md overflow-hidden cursor-pointer bg-gray-600 transition-all duration-200 flex-shrink-0"
           @click="openFileDialog"
@@ -207,12 +195,12 @@ function handleChange(event: any) {
       </div>
     </div>
 
-    <!-- 文件输入 -->
+    <!-- hidden - file input -->
     <input
         ref="fileInput"
         accept="image/*"
         multiple
-        style="display: none"
+        class="hidden"
         type="file"
         @change="handleFileSelect"
     />

@@ -22,17 +22,14 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits<Emits>()
 
-// Create a local reactive copy of tier items
 const localItems = ref<RankItem[]>([...props.tier.items])
 
-// Watch for changes in props.tier.items and update local copy
 watch(() => props.tier.items, (newItems) => {
   if (JSON.stringify(newItems) !== JSON.stringify(localItems.value)) {
     localItems.value = [...newItems]
   }
 }, { deep: true })
 
-// Watch for changes in localItems and emit to parent
 watch(localItems, (newItems) => {
   if (JSON.stringify(newItems) !== JSON.stringify(props.tier.items)) {
     console.log(`Tier ${props.tier.name} items changed:`, newItems)
@@ -46,33 +43,20 @@ const tierStyle = computed(() => ({
   color: getContrastColor(props.tier.color)
 }))
 
-// 根据背景颜色计算对比文字颜色
+// Calculate contrast text color based on background color
 function getContrastColor(hexColor: string): string {
-  // 移除 # 符号
+  // Remove # symbol
   const hex = hexColor.replace('#', '')
   
-  // 转换为 RGB
+  // Convert to RGB
   const r = parseInt(hex.substr(0, 2), 16)
   const g = parseInt(hex.substr(2, 2), 16)
   const b = parseInt(hex.substr(4, 2), 16)
   
-  // 计算亮度
+  // Calculate brightness
   const brightness = (r * 299 + g * 587 + b * 114) / 1000
   
   return brightness > 128 ? '#000' : '#fff'
-}
-
-function handleStart(event: any) {
-  // 设置拖拽数据，用于删除区域
-  const item = localItems.value[event.oldIndex]
-  if (item && event.originalEvent?.dataTransfer) {
-    const dragData = {
-      item: item,
-      source: 'tier',
-      tierId: props.tier.id
-    }
-    event.originalEvent.dataTransfer.setData('text/plain', JSON.stringify(dragData))
-  }
 }
 
 function handleImageError(event: Event) {
@@ -124,11 +108,13 @@ function handleDeleteTier() {
         chosen-class="drag-chosen"
         drag-class="drag-drag"
         class="flex flex-wrap gap-1.5 w-full min-h-[48px]"
-        @start="handleStart"
       >
         <div
           v-for="item in localItems"
           :key="item.id"
+          :data-source="'tier'"
+          :data-tier-id="tier.id"
+          :data-item-id="item.id"
           class="relative w-12 h-12 border-2 border-gray-500 rounded overflow-hidden cursor-grab bg-gray-600 transition-all duration-200 flex-shrink-0 hover:border-blue-500 hover:-translate-y-px hover:shadow-lg hover:shadow-blue-500/30 active:cursor-grabbing"
         >
           <img

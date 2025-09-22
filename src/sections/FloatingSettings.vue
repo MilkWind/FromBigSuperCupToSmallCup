@@ -6,21 +6,18 @@ import SvgIcon from '../components/SvgIcon.vue'
 
 const store = useRankStore()
 
-// Collapsible state
 const isCollapsed = ref(false)
 
 function toggleCollapsed() {
   isCollapsed.value = !isCollapsed.value
 }
 
-// Props
 interface Props {
   showHelp: boolean
 }
 
 defineProps<Props>()
 
-// Emits
 const emit = defineEmits<{
   'update:showHelp': [value: boolean]
   'edit-title': []
@@ -32,9 +29,6 @@ const emit = defineEmits<{
   'delete-template': []
 }>()
 
-// 计算属性 - removed unused currentTemplateName
-
-// 方法
 function handleTemplateChange(event: Event) {
   emit('template-change', event)
 }
@@ -45,7 +39,7 @@ function handleShowHelp() {
 </script>
 
 <template>
-  <!-- 浮动设置面板 -->
+  <!-- Floating settings panel -->
   <aside class="fixed top-5 right-5 z-[1000]">
     <div class="bg-gray-800/95 backdrop-blur-md border border-gray-600 rounded-xl shadow-2xl shadow-black/30 xl:bg-gray-800 transition-all duration-300" :class="isCollapsed ? 'p-2' : 'p-4 min-w-[200px]'">
       <!-- Toggle Button -->

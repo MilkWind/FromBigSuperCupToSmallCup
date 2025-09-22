@@ -3,7 +3,6 @@ import type { RankItem } from '../stores/rankStore'
 import Library from '../components/Library.vue'
 import DeleteZone from '../components/DeleteZone.vue'
 
-// Props
 interface Props {
   library: RankItem[]
   showItemNames: boolean
@@ -11,7 +10,6 @@ interface Props {
 
 const props = defineProps<Props>()
 
-// Emits
 const emit = defineEmits<{
   'update-library': [items: RankItem[]]
   'add-library-item': [item: RankItem]
@@ -22,7 +20,7 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <!-- 底部固钉素材库和删除区域 -->
+  <!-- Bottom library and delete zone -->
   <footer class="fixed bottom-5 left-5 right-5 p-4 rounded-2xl  bg-gray-800/[0.98] backdrop-blur-md border-t border-gray-600 z-[100] shadow-2xl shadow-black/30">
     <div class="flex gap-3">
       <div class="flex-1">

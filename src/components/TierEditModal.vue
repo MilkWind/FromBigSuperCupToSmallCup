@@ -70,7 +70,7 @@ function updateColorPicker(textValue: string) {
   }
 }
 
-// 计算对比颜色的工具函数
+// Calculate contrast text color based on background color
 function getContrastColor(hexColor: string): string {
   const hex = hexColor.replace('#', '')
   const r = parseInt(hex.substr(0, 2), 16)

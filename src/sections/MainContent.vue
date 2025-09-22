@@ -6,7 +6,6 @@ import SvgIcon from '../components/SvgIcon.vue'
 
 const store = useRankStore()
 
-// Emits
 const emit = defineEmits<{
   'edit-title': []
   'edit-tier': [tier: Tier]
@@ -16,9 +15,9 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <!-- 主内容区 -->
+  <!-- Main content -->
   <main class="flex-1 flex min-h-[calc(100vh-200px)] p-5">
-    <!-- 排行榜区域 -->
+    <!-- Tier content -->
     <section class="flex-1 min-w-0 w-full">
       <div class="mb-5">
         <h1 class="text-white text-3xl md:text-2xl font-bold m-0 cursor-pointer px-4 py-2 rounded-lg transition-colors duration-300 text-center hover:bg-blue-500/10" @click="emit('edit-title')">{{ store.pageTitle }}</h1>

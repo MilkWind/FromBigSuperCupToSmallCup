@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {ref, watch} from 'vue'
+import {ref} from 'vue'
 import {VueDraggable} from 'vue-draggable-plus'
 import SvgIcon from './SvgIcon.vue'
 import type {RankItem} from '../stores/rankStore'
@@ -16,22 +16,6 @@ const emit = defineEmits<Emits>()
 const dragOver = ref(false)
 const deleteItems = ref<RankItem[]>([])
 
-// Watch for changes in deleteItems and handle deletion
-watch(deleteItems, (newItems) => {
-  if (newItems.length > 0) {
-    console.log('Delete zone model updated with items:', newItems)
-    // Delete all items that were added
-    newItems.forEach(item => {
-      if (item && item.id) {
-        console.log('Deleting item from model watch:', item.id)
-        emit('deleteItem', item.id)
-      }
-    })
-    // Clear the delete zone
-    deleteItems.value = []
-  }
-}, {deep: true})
-
 function handleAdd(event: any) {
   console.log('Delete zone received item:', event)
 
@@ -39,16 +23,25 @@ function handleAdd(event: any) {
   if (domElement) {
     console.log('DOM element:', domElement)
 
-    let itemId = null
+    // Get source information from custom data attributes
+    const source = domElement.dataset.source
+    const itemId = domElement.dataset.itemId
+    const tierId = domElement.dataset.tierId
 
-    if (domElement.__vnode) {
-      const vnode = domElement.__vnode
-      console.log('VNode:', vnode)
-      itemId = vnode.key
-    }
+    console.log('Item source:', source, 'itemId:', itemId, 'tierId:', tierId)
 
     if (itemId) {
-      emit('deleteItem', itemId)
+      if (source === 'tier' && tierId) {
+        console.log('Removing item from tier via handleAdd:', tierId, itemId)
+        emit('removeFromTier', tierId, itemId)
+      } else if (source === 'library') {
+        console.log('Deleting item completely via handleAdd:', itemId)
+        emit('deleteCompletely', itemId)
+      } else {
+        // Fallback to complete deletion if source is unclear
+        console.log('Unknown source, deleting item completely:', itemId)
+        emit('deleteCompletely', itemId)
+      }
     }
   }
 
@@ -61,29 +54,9 @@ function handleDrop(event: DragEvent) {
   event.preventDefault()
   dragOver.value = false
   
-  try {
-    const dragDataStr = event.dataTransfer?.getData('text/plain')
-    if (dragDataStr) {
-      console.log('Delete zone received drag data:', dragDataStr)
-      const dragData = JSON.parse(dragDataStr)
-      
-      if (dragData.source === 'tier') {
-        // Item dragged from a tier - only remove from that tier
-        console.log('Removing item from tier:', dragData.tierId, dragData.item.id)
-        emit('removeFromTier', dragData.tierId, dragData.item.id)
-      } else if (dragData.source === 'library') {
-        // Item dragged from library - delete completely
-        console.log('Deleting item completely:', dragData.item.id)
-        emit('deleteCompletely', dragData.item.id)
-      } else {
-        // Fallback for legacy drag data format
-        console.log('Using fallback deletion for item:', dragData.id || dragData.item?.id)
-        emit('deleteItem', dragData.id || dragData.item?.id)
-      }
-    }
-  } catch (error) {
-    console.error('Failed to parse drag data:', error)
-  }
+  // The handleDrop function is mainly for handling file drops
+  // The drag and drop of items is handled by handleAdd function
+  console.log('HandleDrop called - this is typically for file drops')
 }
 
 function handleDragOver(event: DragEvent) {
