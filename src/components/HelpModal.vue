@@ -112,39 +112,12 @@ const emit = defineEmits<Emits>()
               <li class="mb-2 pl-4 relative leading-6 text-gray-300 before:content-['•'] before:text-blue-500 before:absolute before:left-0 before:font-bold">所有数据自动保存到浏览器本地存储</li>
               <li class="mb-2 pl-4 relative leading-6 text-gray-300 before:content-['•'] before:text-blue-500 before:absolute before:left-0 before:font-bold">不同排行模式的数据独立保存</li>
               <li class="mb-2 pl-4 relative leading-6 text-gray-300 before:content-['•'] before:text-blue-500 before:absolute before:left-0 before:font-bold">下次打开页面时会自动恢复所有设置</li>
-              <li class="mb-2 pl-4 relative leading-6 text-gray-300 before:content-['•'] before:text-blue-500 before:absolute before:left-0 before:font-bold">可以使用导入/导出功能备份数据</li>
               <li class="mb-2 pl-4 relative leading-6 text-gray-300 before:content-['•'] before:text-blue-500 before:absolute before:left-0 before:font-bold">数据仅保存在你的浏览器中，隐私安全</li>
             </ul>
             <div class="bg-blue-500/10 border-l-4 border-blue-500 px-4 py-3 my-4 rounded-r-md text-sm text-blue-100">
               <SvgIcon name="warning" :size="16" class="text-blue-500 inline mr-1" />
-              <strong class="text-blue-500">重要：</strong>清除浏览器数据会导致排行榜数据丢失，建议定期导出备份。
+              <strong class="text-blue-500">重要：</strong>清除浏览器数据会导致排行榜数据丢失！
             </div>
-          </div>
-
-          <div class="mb-6 pb-5 border-b border-gray-600 last:border-b-0 last:mb-0">
-            <h4 class="text-blue-500 text-lg mb-3 flex items-center gap-2">
-              <SvgIcon name="palette" :size="20" class="text-blue-500" />
-              主题特色
-            </h4>
-            <ul class="list-none p-0">
-              <li class="mb-2 pl-4 relative leading-6 text-gray-300 before:content-['•'] before:text-blue-500 before:absolute before:left-0 before:font-bold">深色主题保护眼睛，适合长时间使用</li>
-              <li class="mb-2 pl-4 relative leading-6 text-gray-300 before:content-['•'] before:text-blue-500 before:absolute before:left-0 before:font-bold">浅灰色细线背景增加质感</li>
-              <li class="mb-2 pl-4 relative leading-6 text-gray-300 before:content-['•'] before:text-blue-500 before:absolute before:left-0 before:font-bold">响应式设计，支持移动设备</li>
-              <li class="mb-2 pl-4 relative leading-6 text-gray-300 before:content-['•'] before:text-blue-500 before:absolute before:left-0 before:font-bold">流畅的动画效果提升使用体验</li>
-            </ul>
-          </div>
-
-          <div class="mb-6 pb-5 border-b border-gray-600 last:border-b-0 last:mb-0">
-            <h4 class="text-blue-500 text-lg mb-3 flex items-center gap-2">
-              <SvgIcon name="info" :size="20" class="text-blue-500" />
-              关于
-            </h4>
-            <ul class="list-none p-0">
-              <li class="mb-2 pl-4 relative leading-6 text-gray-300 before:content-['•'] before:text-blue-500 before:absolute before:left-0 before:font-bold"><strong class="text-white">版本：</strong>v2.0</li>
-              <li class="mb-2 pl-4 relative leading-6 text-gray-300 before:content-['•'] before:text-blue-500 before:absolute before:left-0 before:font-bold"><strong class="text-white">技术栈：</strong>Vue 3 + TypeScript + Pinia</li>
-              <li class="mb-2 pl-4 relative leading-6 text-gray-300 before:content-['•'] before:text-blue-500 before:absolute before:left-0 before:font-bold"><strong class="text-white">特性：</strong>支持多种排行模式，数据持久化，拖拽排序</li>
-              <li class="mb-2 pl-4 relative leading-6 text-gray-300 before:content-['•'] before:text-blue-500 before:absolute before:left-0 before:font-bold"><strong class="text-white">开源：</strong>基于原始tierList.html改进</li>
-            </ul>
           </div>
         </div>
       </div>
