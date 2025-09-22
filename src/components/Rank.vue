@@ -32,7 +32,7 @@ watch(() => props.tier.items, (newItems) => {
 
 watch(localItems, (newItems) => {
   if (JSON.stringify(newItems) !== JSON.stringify(props.tier.items)) {
-    console.log(`Tier ${props.tier.name} items changed:`, newItems)
+    // console.log(`Tier ${props.tier.name} items changed:`, newItems)
     emit('updateItems', props.tier.id, [...newItems])
   }
 }, { deep: true })

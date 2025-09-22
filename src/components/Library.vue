@@ -127,9 +127,9 @@ function openFileDialog() {
 
 function handleChange(event: any) {
   // Handle any changes to the library items
-  console.log('Library change event:', event)
+  // console.log('Library change event:', event)
   if (event.removed) {
-    console.log('Item removed from library:', event.removed.element)
+    // console.log('Item removed from library:', event.removed.element)
     // The localItems computed property will automatically emit the update
   }
 }

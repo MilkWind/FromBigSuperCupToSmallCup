@@ -17,29 +17,29 @@ const dragOver = ref(false)
 const deleteItems = ref<RankItem[]>([])
 
 function handleAdd(event: any) {
-  console.log('Delete zone received item:', event)
+  // console.log('Delete zone received item:', event)
 
   const domElement = event.item || event.clone
   if (domElement) {
-    console.log('DOM element:', domElement)
+    // console.log('DOM element:', domElement)
 
     // Get source information from custom data attributes
     const source = domElement.dataset.source
     const itemId = domElement.dataset.itemId
     const tierId = domElement.dataset.tierId
 
-    console.log('Item source:', source, 'itemId:', itemId, 'tierId:', tierId)
+    // console.log('Item source:', source, 'itemId:', itemId, 'tierId:', tierId)
 
     if (itemId) {
       if (source === 'tier' && tierId) {
-        console.log('Removing item from tier via handleAdd:', tierId, itemId)
+        // console.log('Removing item from tier via handleAdd:', tierId, itemId)
         emit('removeFromTier', tierId, itemId)
       } else if (source === 'library') {
-        console.log('Deleting item completely via handleAdd:', itemId)
+        // console.log('Deleting item completely via handleAdd:', itemId)
         emit('deleteCompletely', itemId)
       } else {
         // Fallback to complete deletion if source is unclear
-        console.log('Unknown source, deleting item completely:', itemId)
+        // console.log('Unknown source, deleting item completely:', itemId)
         emit('deleteCompletely', itemId)
       }
     }
@@ -56,7 +56,7 @@ function handleDrop(event: DragEvent) {
   
   // The handleDrop function is mainly for handling file drops
   // The drag and drop of items is handled by handleAdd function
-  console.log('HandleDrop called - this is typically for file drops')
+  // console.log('HandleDrop called - this is typically for file drops')
 }
 
 function handleDragOver(event: DragEvent) {

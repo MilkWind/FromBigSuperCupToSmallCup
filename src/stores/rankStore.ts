@@ -139,21 +139,21 @@ export const useRankStore = defineStore('rank', () => {
     }
 
     const removeFromLibrary = (itemId: string) => {
-        console.log('Store removeFromLibrary called with ID:', itemId)
-        console.log('Current library:', library.value.map(item => ({id: item.id, name: item.name})))
+        // console.log('Store removeFromLibrary called with ID:', itemId)
+        // console.log('Current library:', library.value.map(item => ({id: item.id, name: item.name})))
         const index = library.value.findIndex((item: RankItem) => item.id === itemId)
-        console.log('Found index:', index)
+        // console.log('Found index:', index)
         if (index !== -1) {
             const removedItem = library.value.splice(index, 1)
-            console.log('Removed item:', removedItem[0])
+            // console.log('Removed item:', removedItem[0])
             saveLibrary()
         } else {
-            console.log('Item not found in library')
+            // console.log('Item not found in library')
         }
     }
 
     const removeItemFromAllTiers = (itemId: string) => {
-        console.log('Store removeItemFromAllTiers called with ID:', itemId)
+        // console.log('Store removeItemFromAllTiers called with ID:', itemId)
         let removed = false
 
         // Get current tiers data
@@ -165,14 +165,14 @@ export const useRankStore = defineStore('rank', () => {
                 count++
                 const index = tier.items.findIndex((item: RankItem) => item.id === itemId)
                 if (index !== -1) {
-                    console.log(`Removing item from tier ${tier.name}`)
+                    // console.log(`Removing item from tier ${tier.name}`)
                     tier.items.splice(index, 1)
                 } else {
                     removed = true
                     break
                 }
             }
-            console.log(`Removed ${count} items from tier ${tier.name}`)
+            // console.log(`Removed ${count} items from tier ${tier.name}`)
 
         })
 
@@ -188,7 +188,7 @@ export const useRankStore = defineStore('rank', () => {
     }
 
     const deleteItemCompletely = (itemId: string) => {
-        console.log('Store deleteItemCompletely called with ID:', itemId)
+        // console.log('Store deleteItemCompletely called with ID:', itemId)
         removeFromLibrary(itemId)
         removeItemFromAllTiers(itemId)
     }

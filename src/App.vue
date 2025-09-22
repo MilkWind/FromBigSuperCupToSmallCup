@@ -70,7 +70,7 @@ function handleTierDelete(tierId: string) {
 }
 
 function handleTierItemsUpdate(tierId: string, items: RankItem[]) {
-  console.log(`App updating tier ${tierId} with items:`, items)
+  // console.log(`App updating tier ${tierId} with items:`, items)
   store.updateTierItems(tierId, items)
 }
 
@@ -103,18 +103,18 @@ function handleLibraryAddItem(item: RankItem) {
 }
 
 function handleDeleteItem(itemId: string) {
-  console.log('App deleting item with ID (legacy):', itemId)
+  // console.log('App deleting item with ID (legacy):', itemId)
   // This is for backward compatibility - complete deletion
   store.deleteItemCompletely(itemId)
 }
 
 function handleRemoveFromTier(tierId: string, itemId: string) {
-  console.log('App removing item from tier:', tierId, itemId)
+  // console.log('App removing item from tier:', tierId, itemId)
   store.removeItemFromTier(tierId, itemId)
 }
 
 function handleDeleteCompletely(itemId: string) {
-  console.log('App deleting item completely:', itemId)
+  // console.log('App deleting item completely:', itemId)
   store.deleteItemCompletely(itemId)
 }
 
