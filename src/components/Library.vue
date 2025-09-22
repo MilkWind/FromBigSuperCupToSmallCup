@@ -2,6 +2,7 @@
 import {computed, ref} from 'vue'
 import {VueDraggable} from 'vue-draggable-plus'
 import type {RankItem} from '../stores/rankStore'
+import {useDialogStore} from '../stores/dialogStore'
 
 interface Props {
   items: RankItem[]
@@ -20,6 +21,7 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const emit = defineEmits<Emits>()
+const dialogStore = useDialogStore()
 
 const fileInput = ref<HTMLInputElement>()
 const dragOver = ref(false)
@@ -107,8 +109,8 @@ function handleDragLeave() {
   dragOver.value = false
 }
 
-function handleItemDoubleClick(item: RankItem) {
-  const newName = prompt('请输入素材名称：', item.name)
+async function handleItemDoubleClick(item: RankItem) {
+  const newName = await dialogStore.showPrompt('请输入素材名称：', item.name, '编辑素材')
   if (newName !== null && newName.trim()) {
     emit('editItem', {...item, name: newName.trim()})
   }
@@ -137,71 +139,72 @@ function handleChange(event: any) {
 </script>
 
 <template>
-    <div
-        :class="{ 'border-blue-500 bg-blue-500/10': dragOver }"
-        class="flex flex-wrap gap-2 border border-dashed border-gray-500 rounded-md p-3 bg-gray-700/80 transition-all duration-300 overflow-y-auto h-full"
-        @dragleave="handleDragLeave"
-        @dragover="handleDragOver"
-        @drop="handleDrop"
+  <div
+      :class="{ 'border-blue-500 bg-blue-500/10': dragOver }"
+      class="flex flex-wrap gap-2 border border-dashed border-gray-500 rounded-md p-3 bg-gray-700/80 transition-all duration-300 overflow-y-auto h-full"
+      @dragleave="handleDragLeave"
+      @dragover="handleDragOver"
+      @drop="handleDrop"
+  >
+    <VueDraggable
+        v-model="localItems"
+        :animation="200"
+        :group="{ name: 'items', pull: 'clone', put: false }"
+        :sort="false"
+        chosen-class="drag-chosen"
+        class="flex flex-wrap gap-2 library-container"
+        drag-class="drag-drag"
+        ghost-class="drag-ghost"
+        @change="handleChange"
     >
-      <VueDraggable
-          v-model="localItems"
-          :animation="200"
-          :group="{ name: 'items', pull: 'clone', put: false }"
-          :sort="false"
-          chosen-class="drag-chosen"
-          class="flex flex-wrap gap-2 library-container"
-          drag-class="drag-drag"
-          ghost-class="drag-ghost"
-          @change="handleChange"
+      <div
+          v-for="item in items"
+          :key="item.id"
+          :data-item-id="item.id"
+          :data-source="'library'"
+          class="relative w-[48px] h-[48px] border-2 border-gray-500 rounded-md overflow-hidden cursor-grab bg-gray-600 transition-all duration-200 flex-shrink-0 hover:border-blue-500 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-blue-500/30 active:cursor-grabbing"
+          @dblclick="handleItemDoubleClick(item)"
       >
-        <div
-            v-for="item in items"
-            :key="item.id"
-            :data-source="'library'"
-            :data-item-id="item.id"
-            class="relative w-[48px] h-[48px] border-2 border-gray-500 rounded-md overflow-hidden cursor-grab bg-gray-600 transition-all duration-200 flex-shrink-0 hover:border-blue-500 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-blue-500/30 active:cursor-grabbing"
-            @dblclick="handleItemDoubleClick(item)"
+        <img
+            v-if="item.image"
+            :alt="item.name"
+            :src="item.image"
+            class="w-full h-full object-cover block"
+            @error="handleImageError"
+        />
+        <div v-else class="w-full h-full flex items-center justify-center text-2xl text-gray-500">
+          📄
+        </div>
+        <span
+            v-if="showItemNames"
+            :title="item.name"
+            class="absolute bottom-0 left-0 right-0 bg-black/80 text-white text-[10px] text-center px-1 py-0.5 whitespace-nowrap overflow-hidden text-ellipsis"
         >
-          <img
-              v-if="item.image"
-              :alt="item.name"
-              :src="item.image"
-              class="w-full h-full object-cover block"
-              @error="handleImageError"
-          />
-          <div v-else class="w-full h-full flex items-center justify-center text-2xl text-gray-500">
-            📄
-          </div>
-          <span
-              v-if="showItemNames"
-              class="absolute bottom-0 left-0 right-0 bg-black/80 text-white text-[10px] text-center px-1 py-0.5 whitespace-nowrap overflow-hidden text-ellipsis"
-          >
             {{ item.name }}
           </span>
-        </div>
+      </div>
 
 
-      </VueDraggable>
-      <!-- Add materials button -->
-      <div
-          class="flex flex-col justify-center items-center w-[48px] h-[48px] border-2 border-gray-500 rounded-md overflow-hidden cursor-pointer bg-gray-600 transition-all duration-200 flex-shrink-0"
-          @click="openFileDialog"
-      >
+    </VueDraggable>
+    <!-- Add materials button -->
+    <div
+        class="flex flex-col justify-center items-center w-[48px] h-[48px] border-2 border-gray-500 rounded-md overflow-hidden cursor-pointer bg-gray-600 transition-all duration-200 flex-shrink-0"
+        @click="openFileDialog"
+    >
           <span class="text-[15px]">
             +
           </span>
-        <span  class="text-[10px]">添加素材</span>
-      </div>
+      <span class="text-[10px]">添加素材</span>
     </div>
+  </div>
 
-    <!-- hidden - file input -->
-    <input
-        ref="fileInput"
-        accept="image/*"
-        multiple
-        class="hidden"
-        type="file"
-        @change="handleFileSelect"
-    />
+  <!-- hidden - file input -->
+  <input
+      ref="fileInput"
+      accept="image/*"
+      class="hidden"
+      multiple
+      type="file"
+      @change="handleFileSelect"
+  />
 </template>

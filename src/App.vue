@@ -2,13 +2,16 @@
 import {computed, onMounted, ref} from 'vue'
 import type {RankItem, Tier} from './stores/rankStore'
 import {useRankStore} from './stores/rankStore'
+import {useDialogStore} from './stores/dialogStore'
 import TierEditModal from './components/TierEditModal.vue'
 import HelpModal from './components/HelpModal.vue'
+import DialogContainer from './components/DialogContainer.vue'
 import FloatingSettings from './sections/FloatingSettings.vue'
 import MainContent from './sections/MainContent.vue'
 import LibraryFooter from './sections/LibraryFooter.vue'
 
 const store = useRankStore()
+const dialogStore = useDialogStore()
 
 const showTierEdit = ref(false)
 const showHelp = ref(false)
@@ -25,16 +28,17 @@ onMounted(() => {
   store.loadSettings()
 })
 
-function editTitle() {
-  const newTitle = prompt('请输入新的标题：', store.pageTitle)
+async function editTitle() {
+  const newTitle = await dialogStore.showPrompt('请输入新的标题：', store.pageTitle, '编辑标题')
   if (newTitle !== null && newTitle.trim()) {
     store.pageTitle = newTitle.trim()
     store.saveSettings()
   }
 }
 
-function resetCurrentRanking() {
-  if (confirm(`确定要重置"${currentTemplateName.value}"的排行数据吗？`)) {
+async function resetCurrentRanking() {
+  const confirmed = await dialogStore.showConfirm(`确定要重置"${currentTemplateName.value}"的排行数据吗？`, '重置排行')
+  if (confirmed) {
     store.resetCurrentRanking()
   }
 }
@@ -74,9 +78,9 @@ function handleTierItemsUpdate(tierId: string, items: RankItem[]) {
   store.updateTierItems(tierId, items)
 }
 
-function handleAddNewTier() {
+async function handleAddNewTier() {
   if (store.currentTemplate !== 'custom') {
-    alert('只有自定义模式才能添加新等级')
+    await dialogStore.showAlert('只有自定义模式才能添加新等级', '提示')
     return
   }
   editingTier.value = undefined
@@ -118,32 +122,33 @@ function handleDeleteCompletely(itemId: string) {
   store.deleteItemCompletely(itemId)
 }
 
-function saveAsTemplate() {
+async function saveAsTemplate() {
   if (store.currentTemplate !== 'custom' || store.customTiers.length === 0) {
-    alert('只有在自定义模式下且有等级时才能保存为模板')
+    await dialogStore.showAlert('只有在自定义模式下且有等级时才能保存为模板', '提示')
     return
   }
 
-  const templateName = prompt('请输入模板名称：')
+  const templateName = await dialogStore.showPrompt('请输入模板名称：', '', '保存模板')
   if (templateName && templateName.trim()) {
     if (store.saveAsTemplate(templateName.trim())) {
-      alert('模板保存成功！')
+      await dialogStore.showAlert('模板保存成功！', '成功')
     } else {
-      alert('保存模板失败')
+      await dialogStore.showAlert('保存模板失败', '错误')
     }
   }
 }
 
-function deleteTemplate() {
+async function deleteTemplate() {
   const currentTemplateObj = store.templates.find(t => t.id === store.currentTemplate)
   if (!currentTemplateObj || !currentTemplateObj.id.startsWith('custom-')) {
-    alert('只能删除自定义模板')
+    await dialogStore.showAlert('只能删除自定义模板', '提示')
     return
   }
 
-  if (confirm(`确定要删除模板"${currentTemplateObj.name}"吗？`)) {
+  const confirmed = await dialogStore.showConfirm(`确定要删除模板"${currentTemplateObj.name}"吗？`, '删除模板')
+  if (confirmed) {
     if (store.deleteCustomTemplate(store.currentTemplate)) {
-      alert('模板删除成功')
+      await dialogStore.showAlert('模板删除成功', '成功')
     }
   }
 }
@@ -195,6 +200,9 @@ function deleteTemplate() {
         v-if="showHelp"
         @close="showHelp = false"
     />
+
+    <!-- Dialog Container -->
+    <DialogContainer />
   </div>
 </template>
 

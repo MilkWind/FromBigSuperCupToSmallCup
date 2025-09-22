@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import type { Tier } from '../stores/rankStore'
+import { useDialogStore } from '../stores/dialogStore'
 
 interface Props {
   show: boolean
@@ -18,6 +19,7 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const emit = defineEmits<Emits>()
+const dialogStore = useDialogStore()
 
 const form = ref({
   name: '',
@@ -40,9 +42,9 @@ function handleClose() {
   emit('close')
 }
 
-function handleSave() {
+async function handleSave() {
   if (!form.value.name.trim()) {
-    alert('请输入等级名称')
+    await dialogStore.showAlert('请输入等级名称', '提示')
     return
   }
 
@@ -62,11 +64,11 @@ function updateColorText(colorValue: string) {
   form.value.color = colorValue
 }
 
-function updateColorPicker(textValue: string) {
+async function updateColorPicker(textValue: string) {
   if (/^#[0-9A-F]{6}$/i.test(textValue)) {
     form.value.color = textValue
   } else {
-    alert('请输入有效的颜色代码，例如 #FF0000')
+    await dialogStore.showAlert('请输入有效的颜色代码，例如 #FF0000', '格式错误')
   }
 }
 
